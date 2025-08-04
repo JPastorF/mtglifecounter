@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class NumberStepper extends StatefulWidget {
   final int initialValue;
@@ -78,15 +79,16 @@ class _NumberStepperState extends State<NumberStepper> {
         ),
         SizedBox(
           width: 56, // Puedes ajustar este valor según el tamaño de tu fuente
-          child: Text(
+          child: AutoSizeText(
             '$_currentValue',
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
-              fontSize: 48,
+              fontSize: 50,
               fontWeight: FontWeight.bold,
             ),
-            textAlign:
-                TextAlign.center, // Centramos el número dentro del espacio
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            minFontSize: 30,
           ),
         ),
         IconButton(

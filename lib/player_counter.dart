@@ -1,6 +1,7 @@
 // Puedes crear este widget en un archivo separado para mayor orden
 
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class PlayerCounter extends StatefulWidget {
   final int initialLife;
@@ -111,40 +112,54 @@ class _PlayerCounterState extends State<PlayerCounter> {
             // El contador de vida (ocupa 2/3 del espacio, por ejemplo)
             Expanded(
               flex: 4,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment:
-                      MainAxisAlignment.center, // Centra verticalmente
-                  crossAxisAlignment:
-                      CrossAxisAlignment.center, // Centra horizontalmente
-                  children: [
-                    //const SizedBox(height: 10),
-                    const Icon(Icons.add_circle, color: Colors.white, size: 24),
-
-                    // El número de vida
-                    Center(
-                      child: Text(
-                        '$_life',
-                        style: TextStyle(
-                          fontSize: fontSize,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
+              child: Stack(
+                // <--- Se usa Stack en lugar de Column
+                children: [
+                  // El número de vida (se centra en toda la pantalla y se ajusta)
+                  Center(
+                    child: AutoSizeText(
+                      '$_life',
+                      style: const TextStyle(
+                        fontSize:
+                            500, // Un valor inicial grande para que se ajuste al máximo
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      minFontSize:
+                          80, // Un mínimo bajo para evitar desbordamientos
+                      textScaleFactor:
+                          1.0, // Ignora el tamaño de fuente del sistema
+                    ),
+                  ),
+                  // Icono visual para sumar (se alinea arriba, independientemente del texto)
+                  const Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Icon(
+                        Icons.add_circle,
+                        color: Colors.white,
+                        size: 24,
                       ),
                     ),
-                    // Icono visual para sumar (ya no es un botón)
-                    const Icon(
-                      Icons.remove_circle,
-                      color: Colors.white,
-                      size: 24,
+                  ),
+                  // Icono visual para restar (se alinea abajo)
+                  const Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: Icon(
+                        Icons.remove_circle,
+                        color: Colors.white,
+                        size: 24,
+                      ),
                     ),
-                    // const SizedBox(height: 10),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-
             // El panel del historial (ocupa 1/3 del espacio)
             SizedBox(
               width: 78,
