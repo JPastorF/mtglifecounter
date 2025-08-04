@@ -163,7 +163,7 @@ class _PlayerCounterState extends State<PlayerCounter> {
                             _history[index],
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 24,
+                              fontSize: 20,
                             ),
                             textAlign: TextAlign.left,
                             maxLines: 1,
