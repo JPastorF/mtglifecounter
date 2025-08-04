@@ -149,7 +149,7 @@ class _PlayerCounterState extends State<PlayerCounter> {
             ),
             // El panel del historial (ocupa 1/3 del espacio)
             SizedBox(
-              width: 78,
+              width: 76,
               child: Container(
                 color: Colors.black.withOpacity(0.5),
                 child: Column(
@@ -159,12 +159,17 @@ class _PlayerCounterState extends State<PlayerCounter> {
                         controller: _scrollController,
                         itemCount: _history.length,
                         itemBuilder: (context, index) {
-                          return Text(
+                          return AutoSizeText(
                             _history[index],
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 24,
                             ),
+                            textAlign: TextAlign.left,
+                            maxLines: 1,
+                            minFontSize:
+                                12, // Un mínimo bajo para evitar desbordamientos
+                            textScaleFactor: 1.0,
                           );
                         },
                       ),
