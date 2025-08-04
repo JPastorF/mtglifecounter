@@ -90,19 +90,6 @@ class _PlayerCounterState extends State<PlayerCounter> {
 
   @override
   Widget build(BuildContext context) {
-    // Obtenemos el número de dígitos en la vida actual.
-    final int digits = _life.toString().length;
-    final double fontSize;
-
-    // Asignamos un tamaño de fuente basado en el número de dígitos.
-    if (digits <= 2) {
-      fontSize = 140.0; // Para números como 20 o 9
-    } else if (digits == 3) {
-      fontSize = 140.0; // Para números como 120
-    } else {
-      fontSize = 132.0; // Para números con 4 o más dígitos
-    }
-
     return GestureDetector(
       onTapDown: _onTap,
       child: Container(
