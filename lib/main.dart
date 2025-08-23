@@ -224,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   angle: _isRotated ? 3.14159 : 0,
                   child: PlayerCounter(
                     initialLife: 20,
-                    color: Colors.deepPurple.withAlpha(225),
+                    color: Color(0xFFA0522D).withAlpha(225),
                     resetNotifier: _resetNotifier,
                     lifeChangeAmount: _lifeChangeAmount,
                     onLifeChanged: _onLifeChanged,
@@ -289,7 +289,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 flex: 1,
                 child: PlayerCounter(
                   initialLife: 20,
-                  color: Colors.green.withAlpha(225),
+                  color: Color(0xFF1A531A).withAlpha(225),
                   resetNotifier: _resetNotifier,
                   lifeChangeAmount: _lifeChangeAmount,
                   onLifeChanged: _onLifeChanged,

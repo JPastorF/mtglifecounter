@@ -95,7 +95,7 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/icono2.png" # Ruta a tu logo con fondo transparente
+  image_path: "assets/images/logo_full_tapped2.jpg" # Ruta a tu logo con fondo transparente
   min_sdk_android: 21
   adaptive_icon_background: "#FFFFFF" # "#512DA8" # Color de fondo del icono (morado oscuro)
-  adaptive_icon_foreground: "assets/images/icono2.png"
+  adaptive_icon_foreground: "assets/images/logo_full_tapped2.jpg"
