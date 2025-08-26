@@ -9,19 +9,16 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   // 1. Asegura que la barra de estado y la barra de navegación estén visibles
-  SystemChrome.setEnabledSystemUIMode(
-    SystemUiMode.manual,
-    overlays: SystemUiOverlay.values,
-  );
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   // 2. Configura el estilo de la barra de estado
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Colors.black, // Fondo negro para la barra de estado
-      statusBarIconBrightness: Brightness.light, // Iconos blancos
-      systemNavigationBarColor: Colors.black, // Fondo de la barra de navegación
-      systemNavigationBarIconBrightness:
-          Brightness.light, // Iconos de navegación blancos
+      statusBarColor: Colors.black,
+      statusBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      // Iconos de navegación blancos
     ),
   );
 
@@ -204,98 +201,104 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     // El color de fondo del Scaffold se usará para la barra de estado
-    return Scaffold(
-      //backgroundColor: Colors.black,
-      body: Container(
-        // La imagen de fondo solo se aplica al body del Scaffold
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/BackgroundBW.png'),
-            fit: BoxFit.cover,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.black,
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Container(
+          // La imagen de fondo solo se aplica al body del Scaffold
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/tap.png'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        // El contenido de la app se coloca dentro de un SafeArea
-        child: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Transform.rotate(
-                  angle: _isRotated ? 3.14159 : 0,
+          // El contenido de la app se coloca dentro de un SafeArea
+          child: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Transform.rotate(
+                    angle: _isRotated ? 3.14159 : 0,
+                    child: PlayerCounter(
+                      initialLife: 20,
+                      color: Color(0xFF190C36).withAlpha(225),
+                      resetNotifier: _resetNotifier,
+                      lifeChangeAmount: _lifeChangeAmount,
+                      onLifeChanged: _onLifeChanged,
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 78,
+                  color: Colors.grey[800]!.withAlpha(248),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.refresh,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        tooltip: 'Reiniciar vidas',
+                        onPressed: _showResetConfirmationDialog,
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.crop_rotate,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        tooltip: 'Reiniciar vidas',
+                        onPressed: _toggleRotation,
+                      ),
+                      NumberStepper(
+                        resetNotifier: _resetNotifier,
+                        initialValue: _lifeChangeAmount,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _lifeChangeAmount = newValue;
+                          });
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.monetization_on,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        tooltip: 'Lanzar moneda',
+                        onPressed: _coinFlip,
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.casino,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        tooltip: 'Lanzar dado',
+                        onPressed: _rollDice,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
                   child: PlayerCounter(
                     initialLife: 20,
-                    color: Color(0xFFA0522D).withAlpha(225),
+                    color: Color(0xFF28422A).withAlpha(225),
                     resetNotifier: _resetNotifier,
                     lifeChangeAmount: _lifeChangeAmount,
                     onLifeChanged: _onLifeChanged,
                   ),
                 ),
-              ),
-              Container(
-                height: 78,
-                color: Colors.grey[800]!.withAlpha(248),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.refresh,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                      tooltip: 'Reiniciar vidas',
-                      onPressed: _showResetConfirmationDialog,
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.crop_rotate,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                      tooltip: 'Reiniciar vidas',
-                      onPressed: _toggleRotation,
-                    ),
-                    NumberStepper(
-                      resetNotifier: _resetNotifier,
-                      initialValue: _lifeChangeAmount,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _lifeChangeAmount = newValue;
-                        });
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.monetization_on,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                      tooltip: 'Lanzar moneda',
-                      onPressed: _coinFlip,
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.casino,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                      tooltip: 'Lanzar dado',
-                      onPressed: _rollDice,
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: PlayerCounter(
-                  initialLife: 20,
-                  color: Color(0xFF1A531A).withAlpha(225),
-                  resetNotifier: _resetNotifier,
-                  lifeChangeAmount: _lifeChangeAmount,
-                  onLifeChanged: _onLifeChanged,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
