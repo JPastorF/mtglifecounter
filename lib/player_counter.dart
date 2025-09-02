@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'dart:async';
 
 class PlayerCounter extends StatefulWidget {
   final int initialLife;
@@ -25,13 +26,19 @@ class PlayerCounter extends StatefulWidget {
 
 class _PlayerCounterState extends State<PlayerCounter> {
   late int _life;
+  late int _life2;
   List<String> _history = [];
   final ScrollController _scrollController = ScrollController();
+
+  // Variables para la lógica de debounce
+  Timer? _debounceTimer;
+  //int _currentChange = 0;
 
   @override
   void initState() {
     super.initState();
     _life = widget.initialLife;
+    _life2 = widget.initialLife;
     widget.resetNotifier.addListener(_reset);
   }
 
@@ -40,13 +47,17 @@ class _PlayerCounterState extends State<PlayerCounter> {
     // 3. ¡Muy importante! Se desuscribe cuando el widget se elimina
     widget.resetNotifier.removeListener(_reset);
     _scrollController.dispose(); // También liberamos el controlador de scroll
+    _debounceTimer
+        ?.cancel(); // Cancelamos el temporizador al salir para evitar errores
     super.dispose();
   }
 
   void _reset() {
     setState(() {
       _life = widget.initialLife;
+      _life2 = widget.initialLife;
       _history = [];
+      //_currentChange = 0;
     });
   }
 
@@ -70,21 +81,40 @@ class _PlayerCounterState extends State<PlayerCounter> {
       if (newLife >= -999 && newLife <= 999) {
         setState(() {
           _life += change;
-          // Añade el cambio al historial
-          _history.add(' ${change > 0 ? '+' : ''}$change = $_life');
 
-          // Realiza el scroll al final del historial
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _scrollController.animateTo(
-              _scrollController.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-            );
-          });
           // Llamamos al callback para notificar al padre
           widget.onLifeChanged();
         });
       }
+
+      // Cancelamos el temporizador anterior si existe
+      _debounceTimer?.cancel();
+
+      // Creamos un nuevo temporizador que se disparará en 750ms
+      _debounceTimer = Timer(const Duration(milliseconds: 750), _finalizeTap);
+    }
+  }
+
+  // Este método se ejecuta cuando el usuario deja de pulsar por XXXms
+  void _finalizeTap() {
+    if (_life != _life2) {
+      setState(() {
+        final change = _life - _life2;
+        _life2 = _life;
+        // Añadimos el cambio acumulado al historial
+        final sign = change > 0 ? '+' : '';
+        _history.add('$sign$change = $_life');
+
+        // Realizamos el scroll al final del historial
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        });
+        widget.onLifeChanged();
+      });
     }
   }
 
